@@ -1,0 +1,12 @@
+﻿  main.cpp
+c:\users\bielf\source\repos\opengl\opengl\main.cpp(7): warning C4305: 'inicializando': truncamento de 'double' para 'float'
+c:\users\bielf\source\repos\opengl\opengl\main.cpp(8): warning C4305: 'inicializando': truncamento de 'double' para 'float'
+c:\users\bielf\source\repos\opengl\opengl\main.cpp(13): warning C4244: 'inicializando': conversão de 'double' para 'float', possível perda de dados
+c:\users\bielf\source\repos\opengl\opengl\main.cpp(14): warning C4244: 'inicializando': conversão de 'double' para 'float', possível perda de dados
+c:\users\bielf\source\repos\opengl\opengl\main.cpp(26): warning C4244: '=': conversão de 'double' para 'float', possível perda de dados
+c:\users\bielf\source\repos\opengl\opengl\main.cpp(27): warning C4244: '=': conversão de 'double' para 'float', possível perda de dados
+c:\users\bielf\source\repos\opengl\opengl\main.cpp(41): warning C4305: '+=': truncamento de 'double' para 'float'
+c:\users\bielf\source\repos\opengl\opengl\main.cpp(59): warning C4244: 'argumento': conversão de 'double' para 'GLfloat', possível perda de dados
+c:\users\bielf\source\repos\opengl\opengl\main.cpp(61): warning C4244: 'inicializando': conversão de 'double' para 'float', possível perda de dados
+c:\users\bielf\source\repos\opengl\opengl\main.cpp(62): warning C4244: 'inicializando': conversão de 'double' para 'float', possível perda de dados
+  opengl.vcxproj -> C:\Users\bielf\source\repos\opengl\Debug\opengl.exe

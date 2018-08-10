@@ -1,0 +1,4 @@
+﻿  main.cpp
+c:\users\bielf\source\repos\tarefa_1\tarefa_1\main.cpp(52): warning C4244: '=': conversão de 'double' para 'float', possível perda de dados
+c:\users\bielf\source\repos\tarefa_1\tarefa_1\main.cpp(53): warning C4244: '=': conversão de 'double' para 'float', possível perda de dados
+  Tarefa_1.vcxproj -> C:\Users\bielf\source\repos\Tarefa_1\Debug\Tarefa_1.exe
