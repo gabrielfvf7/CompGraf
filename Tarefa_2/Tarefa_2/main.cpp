@@ -20,6 +20,7 @@ int v2 = 0; //ultimo vertice do poligono
 bool fechou = false; //variavel booleana usada para saber se o poligono foi fechado
 bool clicouPonto = false; //variavel booleana usada pra saber se foi clicado um ponto
 int intercepta = 0; //variavel usada para saber quantas vezes a resta ligando o ponto clicado a um fora da regiao intercepta o poligono
+float red, green = 0.0;
 
 float prodVet(float Px, float Py, float Vx, float Vy) { //funcao usada para calcular o produto vetorial
 	float prodVet = Px * Vy - Py * Vx; //local onde calculo o produto vetorial
@@ -63,9 +64,15 @@ void dentro() { //funcao para descobrir se o ponto clicado pelo mouse esta dentr
 
 	if (intercepta % 2 == 0) { //se o numero de vezes que intercepta for par, o ponto esta fora do poligono
 		cout << "PONTO ESTA FORA DO POLIGONO! \n";
+		red = 1.0;
+		green = 0.0;
+		glutPostRedisplay();
 	}
 	else { //se o numero de vezes que intercepta for impar, o ponto esta dentro do poligono
 		cout << "PONTO ESTA DENTRO DO POLIGONO! \n";
+		red = 0.0;
+		green = 1.0;
+		glutPostRedisplay();
 	}
 }
 
@@ -85,6 +92,7 @@ void mouse(int button, int state, int X, int Y) { //funcao para pegar os cliques
 			posicaoPx = x; //coordenada X do ponto clicado apos o poligono fechar
 			posicaoPy = y; //coordenada Y do ponto clicado apos o poligono fechar
 			clicouPonto = true; //atribuo o valor de true a essa variavel apos eu ter clicado um ponto dentro/fora do poligono
+			dentro();
 			glutPostRedisplay(); //reseto o display
 		}
 	}
@@ -107,7 +115,7 @@ void display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glLineWidth(5);
 	glPointSize(5);
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(0.0, 0.0, 1.0);
 	glBegin(GL_LINE_STRIP); 
 		for (i = 0; i < n; i++) { 
 			glVertex2f(verticeX[i], verticeY[i]); //aqui desenho as arestas do poligono
@@ -115,7 +123,7 @@ void display() {
 		v2 = i;
 	glEnd();
 	if (fechou == true && clicouPonto == true) { //se o poligono estiver fechado e ter sido clicado um ponto com o mouse, desenhara esse ponto
-		glColor3f(0.0, 1.0, 0.0);
+		glColor3f(red, green, 0.0);
 		glBegin(GL_POINTS);
 		glVertex2f(posicaoPx, posicaoPy);
 		glEnd();
