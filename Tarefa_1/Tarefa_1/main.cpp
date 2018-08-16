@@ -80,21 +80,34 @@ void display() {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glLineWidth(5);
-	glColor3f(0.0, 1.0, 0.0);
-	glEnd();
-	glColor3f(1.0, 0.0, 0.0);
+	glPointSize(2);	
+	glColor3f(1.0, 0.0, 0.0);//defino a cor das linhas como vermelho
 	glBegin(GL_LINE_STRIP); //inicio do desenho das linhas
 	if (m == 0) { //se nao tiverem sido criados novos pontos, ao cortar o poligono, será desenhado os vertices dos cliques do mouse
 		for (int i = 0; i < n; i++) { //serao desenhados n pontos, equivalentes aos cliques do mouse
-			glVertex2f(verticeX[i], verticeY[i]);
+			glVertex2f(verticeX[i], verticeY[i]); //defino os vertices das linhas
 		} //OBS: n só será igual ao numero de cliques do mouse na primeira vez que passar por aqui, nas seguintes
 		  //será igual ao numero de pontos criados apos o corte anterior
 	}
 	else { //se tiverem sido criados novos pontos, mas nao foram ainda desenhados, os desenhara aqui
 		for (int i = 0; i < m; i++) { //rodara m vezes, onde m é o numero de novos pontos criados
-			glVertex2f(verticePx[i], verticePy[i]);
+			glVertex2f(verticePx[i], verticePy[i]); //defino os vertices das linhas
 		}
 		reset(); //apos desenhar tudo, chama a funcao para resetar os estados dos vertices e pontos
+	}
+	glEnd();
+
+	glColor3f(0.0, 1.0, 0.0);//defino cor dos pontos como verde
+	glBegin(GL_POINTS); //começo a desenhar os pontos, que roda da mesma forma do desenho das linhas
+	if (m == 0) {
+		for (int i = 0; i < n; i++) { 
+			glVertex2f(verticeX[i], verticeY[i]);
+		} 
+	}
+	else { 
+		for (int i = 0; i < m; i++) {
+			glVertex2f(verticePx[i], verticePy[i]);
+		}
 	}
 	glEnd();
 	glFlush();
