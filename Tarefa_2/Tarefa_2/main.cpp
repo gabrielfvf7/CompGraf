@@ -16,6 +16,7 @@ float posicaoPx[1000];  //posicao em X do ponto clicado
 float posicaoPy[1000];  //posicao em Y do ponto clicado
 int n = 0; //quantidade de pontos criados com o mouse
 int p = 0;
+int aux = 0;
 int i = 0; //variavel usada nos for do programa
 int v2 = 0; //ultimo vertice do poligono
 bool fechou = false; //variavel booleana usada para saber se o poligono foi fechado
@@ -29,15 +30,8 @@ float prodVet(float Px, float Py, float Vx, float Vy) { //funcao usada para calc
 }
 
 void fechar() { //funcao usada para fechar o poligno, usei a letra 'r' do teclado para fechar
-	float moduloX = verticeX[v2 - 1] - verticeX[0]; //aqui calculo a distancia do ultimo vertice em X do poligono com o primeiro
-	float moduloY = verticeY[v2 - 1] - verticeY[0]; //aqui calculo a distancia do ultimo vertice em Y do poligono com o primeiro
-
-	if (abs(moduloX) <= 0.03 && abs(moduloY) <= 0.03) { //se a distancia desse ultimo vertice for suficientemente proxima ao primeiro, eu fecho o poligono, eu defini essa distancia como 0.03, podendo ser mudada
-		verticeX[v2 - 1] = verticeX[0]; //aqui coloco a posicao do ultimo vertice em X exatamente igual ao do primeiro
-		verticeY[v2 - 1] = verticeY[0]; //aqui coloco a posicao do ultimo vertice em X exatamente igual ao do primeiro
 		fechou = true; //defino a variavel fechou como true para indicar que o poligono ja foi fechado
 		glutPostRedisplay(); //reseto o display
-	}
 }
 
 void dentro() { //funcao para descobrir se o ponto clicado pelo mouse esta dentro do poligono, ela eh chamada ao apertar a tecla 'p' do teclado
@@ -46,17 +40,23 @@ void dentro() { //funcao para descobrir se o ponto clicado pelo mouse esta dentr
 	float PQy = 1 - posicaoPy[p]; //defino coordenada Y da aresta que liga o ponto P e o ponto Q (fora da regiao do poligono)
 	float arestaX; //coordenada X da aresta do poligono a qual estarei verificando se foi interceptada por PQ
 	float arestaY; //coordenada Y da aresta do poligono a qual estarei verificando se foi interceptada por PQ
-	for (i = 0; i < n-1; i++) { //rodo um for para cada aresta do poligono
-		arestaX = verticeX[i + 1] - verticeX[i]; //defino a posicao X da aresta atual
-		arestaY = verticeY[i + 1] - verticeY[i]; //defino a posicao Y da aresta atual
+	for (i = 0; i < n; i++) { //rodo um for para cada aresta do poligono
+		if (i == v2-1) {
+			arestaX = verticeX[0] - verticeX[i]; //defino a posicao X da aresta atual
+			arestaY = verticeY[0] - verticeY[i]; //defino a posicao Y da aresta atual
+			aux = 0;
+		}
+		else {
+			arestaX = verticeX[i + 1] - verticeX[i]; //defino a posicao X da aresta atual
+			arestaY = verticeY[i + 1] - verticeY[i]; //defino a posicao Y da aresta atual
+			aux = i + 1;
+		}
 		
-		//considerando como AB a aresta do ponto clicado com o ponto fora da regiao
-		//e CD como a aresta atual do poligono
-		//os produtos vetoriais a seguir serao:
-		float prodVet1 = prodVet(PQx, PQy, (verticeX[i] - posicaoPx[p]), (verticeY[i] - posicaoPy[p])); //(AB x AD)
-		float prodVet2 = prodVet(PQx, PQy, (verticeX[i + 1] - posicaoPx[p]), (verticeY[i + 1] - posicaoPy[p]));//(AB x AC)
-		float prodVet3 = prodVet(arestaX, arestaY, (posicaoPx[p] - verticeX[i]), (posicaoPy[p] - verticeY[i]));//(CD x CA)
-		float prodVet4 = prodVet(arestaX, arestaY, (1 - verticeX[i]), (1 - verticeY[i]));//(CD x CB)
+		float prodVet1, prodVet2, prodVet3, prodVet4;
+		prodVet1 = prodVet(PQx, PQy, (verticeX[i] - posicaoPx[p]), (verticeY[i] - posicaoPy[p])); //(AB x AD)
+		prodVet2 = prodVet(PQx, PQy, (verticeX[aux] - posicaoPx[p]), (verticeY[aux] - posicaoPy[p]));//(AB x AC)
+		prodVet3 = prodVet(arestaX, arestaY, (posicaoPx[p] - verticeX[i]), (posicaoPy[p] - verticeY[i]));//(CD x CA)
+		prodVet4 = prodVet(arestaX, arestaY, (1 - verticeX[i]), (1 - verticeY[i]));//(CD x CB)
 
 		if ((prodVet1 * prodVet2) < 0 && (prodVet3 * prodVet4) < 0) { //aqui verifico se as duas arestas estao se interceptando
 			intercepta++; //caso estejam, incremento em um a variavel intercepta
@@ -118,14 +118,13 @@ void display() {
 	glLineWidth(5);
 	glPointSize(5);
 	glColor3f(0.0, 0.0, 1.0);
-	glBegin(GL_LINE_STRIP); 
+	glBegin(GL_LINE_LOOP); 
 		for (i = 0; i < n; i++) { 
 			glVertex2f(verticeX[i], verticeY[i]); //aqui desenho as arestas do poligono			
 		}
 		v2 = i;
 	glEnd();
-	if (fechou == true && clicouPonto == true) { //se o poligono estiver fechado e ter sido clicado um ponto com o mouse, desenhara esse ponto
-		
+	if (fechou == true && clicouPonto == true) { //se o poligono estiver fechado e ter sido clicado um ponto com o mouse, desenhara esse ponto		
 		glBegin(GL_POINTS);
 		for (i = 0; i < p; i++) {
 			glColor3f(red[i], green[i], 0.0);
