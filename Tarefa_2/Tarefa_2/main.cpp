@@ -17,6 +17,7 @@ float posicaoPy[1000];  //posicao em Y do ponto clicado
 int n = 0; //quantidade de pontos criados com o mouse
 int p = 0;
 int aux = 0;
+bool teste = false; int m = 0;
 int i = 0; //variavel usada nos for do programa
 int v2 = 0; //ultimo vertice do poligono
 bool fechou = false; //variavel booleana usada para saber se o poligono foi fechado
@@ -77,9 +78,28 @@ void dentro() { //funcao para descobrir se o ponto clicado pelo mouse esta dentr
 	}
 }
 
+void mouseMov(int X, int Y) {
+	if (teste == true && fechou == false) {
+		x = (2.*X) / 400 - 1.; //ajusto a coordenada de X
+		y = -(2.*Y) / 400 + 1.; //ajusto a coordenada de Y
+		verticeX[n] = x;
+		verticeY[n] = y;
+		glutPostRedisplay();
+	}
+	if (fechou == true && clicouPonto == true) {
+		x = (2.*X) / 400 - 1.; //ajusto a coordenada de X
+		y = -(2.*Y) / 400 + 1.; //ajusto a coordenada de Y
+		posicaoPx[p] = x; //coordenada X do ponto clicado apos o poligono fechar
+		posicaoPy[p] = y; //coordenada Y do ponto clicado apos o poligono fechar
+		dentro();
+		glutPostRedisplay();
+	}
+}
+
 void mouse(int button, int state, int X, int Y) { //funcao para pegar os cliques do mouse
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		if (fechou == false) {
+			teste = true;
 			x = (2.*X) / 400 - 1.; //ajusto a coordenada de X
 			y = -(2.*Y) / 400 + 1.; //ajusto a coordenada de Y
 			verticeX[n] = x; //vertice X sera a posicao em X do clique do mouse
@@ -119,14 +139,14 @@ void display() {
 	glPointSize(5);
 	glColor3f(0.0, 0.0, 1.0);
 	glBegin(GL_LINE_LOOP); 
-		for (i = 0; i < n; i++) { 
+		for (i = 0; i < n+1; i++) { 
 			glVertex2f(verticeX[i], verticeY[i]); //aqui desenho as arestas do poligono			
 		}
-		v2 = i;
+		v2 = i-1;
 	glEnd();
 	if (fechou == true && clicouPonto == true) { //se o poligono estiver fechado e ter sido clicado um ponto com o mouse, desenhara esse ponto		
 		glBegin(GL_POINTS);
-		for (i = 0; i < p; i++) {
+		for (i = 0; i < p+1; i++) {
 			glColor3f(red[i], green[i], 0.0);
 			glVertex2f(posicaoPx[i], posicaoPy[i]);
 		}
@@ -141,6 +161,7 @@ int main(int argc, char** argv) {
 	glutInitWindowSize(400, 400);
 	glutCreateWindow("Tarefa_2");
 	glutMouseFunc(mouse);
+	glutPassiveMotionFunc(mouseMov);
 	glutKeyboardFunc(teclado);
 	glutDisplayFunc(display);
 	glutMainLoop();
